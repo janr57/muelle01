@@ -1,3 +1,5 @@
 # .gitignore for 'muelle01.jl' pluto notebook
 
 *.pdf
+*.html
+

@@ -1100,7 +1100,7 @@ begin
 		  label = "x₂(t) ODE"
 		 );
 	plot!(plot_fase2_x, ODE_fase2_t, ODE_fase2_x₂₁,
-		  linecolor = :orange, alpha=0.5, yguidefontcolor = :black,
+		  linecolor = :purple, alpha=0.5, yguidefontcolor = :black,
 		  linewidth = 3.0,
 		  label = "x₂(t) - x₁(t) ODE"
 		 );
@@ -1127,7 +1127,7 @@ begin
 		  label = "v₂(t) ODE"
 		 );
 	plot!(plot_fase2_v, ODE_fase2_t, ODE_fase2_v₂₁,
-		  linecolor = :orange, alpha=0.5, yguidefontcolor = :black,
+		  linecolor = :purple, alpha=0.5, yguidefontcolor = :black,
 		  linewidth = 3.0,
 		  label = "v₂(t) - v₁(t) ODE"
 		 );
@@ -1154,7 +1154,7 @@ begin
 		  label = "a₂(t) ODE"
 		 );
 	plot!(plot_fase2_a, ODE_fase2_t, ODE_fase2_a₂₁,
-		  linecolor = :orange, alpha=0.5, yguidefontcolor = :black,
+		  linecolor = :purple, alpha=0.5, yguidefontcolor = :black,
 		  linewidth = 3.0,
 		  label = "a₂(t) - a₁(t) ODE"
 		 );
@@ -4077,12 +4077,12 @@ version = "1.9.2+0"
 # ╠═d7ab580c-061f-4369-babf-1c7608d24073
 # ╟─f76e194d-65da-48bc-ac2c-c213473f79e6
 # ╠═0b53878d-9a5d-4b96-a2eb-5a2bdc1e4027
-# ╠═1cfc9bbd-05cd-4d31-90e9-f8ba2858fb23
+# ╟─1cfc9bbd-05cd-4d31-90e9-f8ba2858fb23
 # ╠═073cd0dc-4932-455b-9f88-a350e2e9695a
 # ╟─8b369410-4589-4878-996d-9cf034e1281f
 # ╠═1552fbf4-a1c3-4daa-9ead-387c11dfa23a
 # ╟─372f8d9a-7cb1-4ff6-8cbe-b81c57872feb
-# ╟─7b531ed8-44b4-4a60-b182-24b1a0f5dc01
+# ╠═7b531ed8-44b4-4a60-b182-24b1a0f5dc01
 # ╟─80b47e79-e777-4d6c-9ef7-ffdea8fcf1ee
 # ╠═0d733fd6-27cd-4a54-bced-9f579a7c3ef3
 # ╟─9175746e-286f-4856-ad16-f64d479f7842
