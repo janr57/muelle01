@@ -864,6 +864,9 @@ begin
 		 )
 end
 
+# ╔═╡ 44d5951c-9562-4567-9dea-bd6425ba4676
+
+
 # ╔═╡ 60db7902-2381-43e1-9a16-8d8ff33ce556
 begin
 	plot_fase1_v = plot(title = "Velocidad de m₂ y del CM (fase 1)",
@@ -4106,6 +4109,7 @@ version = "1.9.2+0"
 # ╟─cb0ffc15-5abd-4bfa-ae0f-c05769f2f386
 # ╟─2a42e1e2-5123-4888-8281-164d44229425
 # ╠═b9b8faee-e7f6-4bcf-b4a7-e6cefe5e2341
+# ╠═44d5951c-9562-4567-9dea-bd6425ba4676
 # ╠═60db7902-2381-43e1-9a16-8d8ff33ce556
 # ╠═0f89d7bf-75e9-485a-bd48-27358295c0b0
 # ╟─f43f4f52-d53e-4b46-98a1-fb80cc4caa83
