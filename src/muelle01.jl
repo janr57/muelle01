@@ -643,8 +643,8 @@ md"###### t₂ₚ: Tiempo final de la segunda fase"
 
 # ╔═╡ c3ab23be-07f4-4429-834a-a612ae221a4a
 begin
-	L₀ = 1.0
-	x₀ = 0.25
+	L₀ = 0.25
+	x₀ = 0.10
 	k = 1.0
 	m₁ = 1.0
 	m₂ = 1.0
@@ -1012,6 +1012,9 @@ md"###### Extracción de valores del resultado en forma de arrays"
 # ╔═╡ 8ca72f78-588d-4c69-a8e8-4fa16fb4b93f
 ODE_fase2_t, ODE_fase2_x₁, ODE_fase2_x₂, ODE_fase2_v₁, ODE_fase2_v₂ = valores_ODE_fase2(fase2_sol, dt=0.001)
 
+# ╔═╡ ab04a12a-b375-4038-ad6c-879033ffb3b6
+ODE_fase1_x₂
+
 # ╔═╡ 4fa8e88a-f332-4446-88f2-90abc693723f
 md"###### Posición relativa ``\text{x₂}\,(t) - \text{x₁}\,(t)``"
 
@@ -1294,6 +1297,143 @@ begin
 		  label = "E(t) ODE fase 2"
 		 )
 end
+
+# ╔═╡ 7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
+md"#### Vectores totales"
+
+# ╔═╡ 9f7bdcef-6373-4338-912a-04585df5fcfd
+# Vector tiempo
+ODE_t = vcat(ODE_fase1_t, ODE_fase2_t);
+
+# ╔═╡ 4ffa4437-0a12-4b8e-a970-3cb6ef136d75
+begin
+	# Vectores posiciones
+	ODE_x₁ = vcat(ODE_fase1_x₁, ODE_fase2_x₁);
+	ODE_x₂ = vcat(ODE_fase1_x₂, ODE_fase2_x₂);
+end
+
+# ╔═╡ 357df361-3f01-4fbe-bfab-897a5b8ee563
+begin
+	# Vectores velocidades
+	ODE_v₁ = vcat(ODE_fase1_v₁, ODE_fase2_v₁);
+	ODE_v₂ = vcat(ODE_fase1_v₂, ODE_fase2_v₂);
+end
+
+# ╔═╡ bdb70ea9-9824-4d32-b37e-84ad0a0a73b3
+begin
+	# Vectores aceleraciones
+	ODE_a₁ = vcat(ODE_fase1_a₁, ODE_fase2_a₁);
+	ODE_a₂ = vcat(ODE_fase1_a₂, ODE_fase2_a₂);
+end
+
+# ╔═╡ 4c5c02d3-d9fd-4f12-b1dc-2f013fe6db4e
+xmin = min(minimum(ODE_x₁), minimum(ODE_x₂))
+
+# ╔═╡ 5c5806a0-338b-4370-a0e0-e8e60fb600a0
+xmax = max(maximum(ODE_x₁), maximum(ODE_x₂))
+
+# ╔═╡ 5428d08b-4550-41df-92c1-0f1580285a76
+p₁ = 100 .* (ODE_x₁ .- xmin)./(xmax - xmin)
+
+# ╔═╡ dd68bd9c-579d-4ea6-97b2-660859fd63df
+p₂ = 100 .* (ODE_x₂ .- xmin)./(xmax - xmin)
+
+# ╔═╡ 87bd5b0f-ba77-4364-af2a-26476df836bb
+# ╠═╡ disabled = true
+#=╠═╡
+simulacion = true
+  ╠═╡ =#
+
+# ╔═╡ 18ca6a2c-eea2-422b-963a-760ae0780c3a
+# ╠═╡ disabled = true
+#=╠═╡
+begin
+	simulacion
+	plot_name = "simul"
+	len = length(p₁)
+	
+	plot_name = plot(legend = :none,
+					 #axis = ([], false),
+					 size = (1024, 150),
+					 xlims = (-2.0, 102.0),
+					 ylims = (0.0, 100.0)
+	);
+
+#	scatter!(plot_name,
+#			 [(x₁[1], 20.0), (x₂[1], 20.0)],
+#			 markersize = 5.0,
+#			 markercolor = :blue
+#	);
+
+	for i in 1:len
+		scatter!(plot_name,
+				[(p₁[i], 20.0), (p₂[i], 20.0)],
+				 markersize = 5.0,
+				 markercolor = :blue
+		)
+	end
+
+	#simula_muelle(plot_name, p₁, p₂)
+end
+  ╠═╡ =#
+
+# ╔═╡ 55baab75-4c3c-45e1-a7ee-0d7d56cd4052
+# ╠═╡ disabled = true
+#=╠═╡
+function simula_muelle(plot_name, x₁, x₂)
+	len = length(x₁)
+	
+	plot_name = plot(legend = :none,
+					 #axis = ([], false),
+					 size = (1024, 150),
+					 xlims = (-2.0, 102.0),
+					 ylims = (0.0, 100.0)
+	);
+
+#	scatter!(plot_name,
+#			 [(x₁[1], 20.0), (x₂[1], 20.0)],
+#			 markersize = 5.0,
+#			 markercolor = :blue
+#	);
+
+	for i in 1:len
+		scatter!(plot_name,
+				[(x₁[i], 20.0), (x₂[i], 20.0)],
+				 markersize = 5.0,
+				 markercolor = :blue
+		)
+	end
+end
+  ╠═╡ =#
+
+# ╔═╡ a80c8645-31cf-470c-9900-2a725a024cd6
+# ╠═╡ disabled = true
+#=╠═╡
+function simula_muelle(plot_name, x₁, x₂)
+	len = length(x₁)
+	plot_name = plot(legend = :none,
+					 axis = ([], false),
+					 xlims = (-2.0, 102.0),
+					 ylims = (0.0, 100.0)
+	);
+	ac
+	scatter!(plot_name, [(x₁[1], 20.0), (x₂[1], 20.0)],
+			 markersize = 5.0,
+			 markercolor = :blue
+	)
+end
+  ╠═╡ =#
+
+# ╔═╡ 1858167c-c799-4c02-ae80-b17af06f0fda
+# ╠═╡ disabled = true
+#=╠═╡
+#	for i in 2:len
+#		scatter!(plot_name, [(x₁[i], 20.0), (x₂[i], 20.0)]
+#		)
+
+#		#scatter!(plot_name, [(x₁[i-1], 20.0), (x₂[i-1], 20.0)], alpha = 0.0)
+#	end
+  ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -4136,6 +4276,7 @@ version = "1.9.2+0"
 # ╠═849c2bce-edb3-4796-9414-c54625aa0977
 # ╟─e107ca77-2312-4fcd-a22a-58d524ac8aec
 # ╠═8ca72f78-588d-4c69-a8e8-4fa16fb4b93f
+# ╠═ab04a12a-b375-4038-ad6c-879033ffb3b6
 # ╟─4fa8e88a-f332-4446-88f2-90abc693723f
 # ╠═60f893c6-429a-4bbd-a534-b0d988afb5e4
 # ╟─9301f9f3-78cc-40b4-9507-cbbcba57d4f4
@@ -4170,5 +4311,19 @@ version = "1.9.2+0"
 # ╠═0ad597cf-cefc-4009-9133-46780a7258f0
 # ╠═7db4a7af-b79b-4ff5-9481-a9a5fa2e71b1
 # ╠═fce3d85c-b507-43a5-a33c-457948d00f86
+# ╟─7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
+# ╠═9f7bdcef-6373-4338-912a-04585df5fcfd
+# ╠═4ffa4437-0a12-4b8e-a970-3cb6ef136d75
+# ╠═357df361-3f01-4fbe-bfab-897a5b8ee563
+# ╠═bdb70ea9-9824-4d32-b37e-84ad0a0a73b3
+# ╠═4c5c02d3-d9fd-4f12-b1dc-2f013fe6db4e
+# ╠═5c5806a0-338b-4370-a0e0-e8e60fb600a0
+# ╠═5428d08b-4550-41df-92c1-0f1580285a76
+# ╠═dd68bd9c-579d-4ea6-97b2-660859fd63df
+# ╠═87bd5b0f-ba77-4364-af2a-26476df836bb
+# ╠═18ca6a2c-eea2-422b-963a-760ae0780c3a
+# ╠═55baab75-4c3c-45e1-a7ee-0d7d56cd4052
+# ╠═a80c8645-31cf-470c-9900-2a725a024cd6
+# ╠═1858167c-c799-4c02-ae80-b17af06f0fda
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
