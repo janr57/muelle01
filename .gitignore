@@ -1,5 +1,9 @@
 # .gitignore for 'muelle01.jl' pluto notebook
 
-*.pdf
 *.html
-
+edit.pdf
+muelle01.pdf
+src/muelle01*backup*.jl
+src/posiciones.json
+img/plot_muelle*.svg
+img/plot_muelle*.pdf

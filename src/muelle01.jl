@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ e89a98ac-917b-4094-871d-6f75a344567b
-using DifferentialEquations, CairoMakie,PlutoUI
+using DifferentialEquations, CairoMakie, JSON3, PlutoUI
 
 # ╔═╡ e5209b22-863c-11f0-2e47-e157a5f44a52
 md"# MUELLE CON DOS MASAS, COMPRIMIDO CONTRA UNA PARED"
@@ -864,18 +864,6 @@ begin
 	f1x
 end	
 
-# ╔═╡ 7d58b57a-2f01-4fc3-986b-709cc9586def
-md"##### Guarda figuras (fase1)"
-
-# ╔═╡ 3c3d8e10-d902-481c-8b8c-e3a0e13f1368
-save("plot_fase1_x.svg", f1x)
-
-# ╔═╡ f7196411-e949-4426-9000-56cf0e72fd3e
-save("plot_fase1_x.pdf", f1x)
-
-# ╔═╡ 8a99e4c6-a767-4c47-ad0f-37b917105edd
-save("plot_fase1_x.png", f1x)
-
 # ╔═╡ dafdf13c-686c-468e-b584-2d93995804bb
 begin
 	f1v = Figure()
@@ -945,6 +933,19 @@ begin
 	
 	f1a
 end	
+
+# ╔═╡ 7d58b57a-2f01-4fc3-986b-709cc9586def
+md"##### Guarda figuras (fase1)"
+
+# ╔═╡ 3c3d8e10-d902-481c-8b8c-e3a0e13f1368
+begin
+	save("../img/plot_muelle01_fase1_x.svg", f1x)
+	save("../img/plot_muelle01_fase1_x.pdf", f1x)
+	save("../img/plot_muelle01_fase1_v.svg", f1v)
+	save("../img/plot_muelle01_fase1_v.svg", f1v)
+	save("../img/plot_muelle01_fase1_a.pdf", f1a)
+	save("../img/plot_muelle01_fase1_a.svg", f1a)
+end
 
 # ╔═╡ f43f4f52-d53e-4b46-98a1-fb80cc4caa83
 md"## Código fuente (fase 2)"
@@ -1213,6 +1214,19 @@ begin
 	f2a
 end	
 
+# ╔═╡ aa7a2209-c7dd-4cbf-99c2-b39035913324
+md"##### Guarda figuras (fase2)"
+
+# ╔═╡ 19b064f3-3d4b-42b8-91c2-6a8992d15d02
+begin
+	save("../img/plot_muelle01_fase2_x.svg", f2x)
+	save("../img/plot_muelle01_fase2_x.pdf", f2x)
+	save("../img/plot_muelle01_fase2_v.svg", f2v)
+	save("../img/plot_muelle01_fase2_v.svg", f2v)
+	save("../img/plot_muelle01_fase2_a.pdf", f2a)
+	save("../img/plot_muelle01_fase2_a.svg", f2a)
+end
+
 # ╔═╡ 6cdac429-dc25-4536-8508-391c0e9b6668
 md"#### Gráficas (Total)"
 
@@ -1395,6 +1409,19 @@ begin
 	fE
 end	
 
+# ╔═╡ 3a770943-a67d-4122-916a-4d6f5af6f405
+md"##### Guarda figuras (total)"
+
+# ╔═╡ ebce3cd0-e50d-47e7-b8a6-46ee728b4683
+begin
+	save("../img/plot_muelle01_x.svg", fx)
+	save("../img/plot_muelle01_x.pdf", fx)
+	save("../img/plot_muelle01_v.svg", fv)
+	save("../img/plot_muelle01_v.svg", fv)
+	save("../img/plot_muelle01_a.pdf", fa)
+	save("../img/plot_muelle01_a.svg", fa)
+end
+
 # ╔═╡ 7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
 md"#### Vectores totales"
 
@@ -1434,6 +1461,14 @@ p₁ = 100 .* (ODE_x₁ .- xmin)./(xmax - xmin)
 
 # ╔═╡ dd68bd9c-579d-4ea6-97b2-660859fd63df
 p₂ = 100 .* (ODE_x₂ .- xmin)./(xmax - xmin)
+
+# ╔═╡ 759c9ca5-e6a8-4143-88ec-8b2bc5f9a9fb
+posiciones = Dict("x1" => ODE_x₁, "x2" => ODE_x₂)
+
+# ╔═╡ e8f6a903-06b1-4937-9e92-084b8996ceec
+open("posiciones.json", "w") do pos
+	JSON3.write(pos, posiciones)
+end
 
 # ╔═╡ 87bd5b0f-ba77-4364-af2a-26476df836bb
 # ╠═╡ disabled = true
@@ -1537,11 +1572,13 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
 CairoMakie = "~0.15.6"
 DifferentialEquations = "~7.16.1"
+JSON3 = "~1.14.3"
 PlutoUI = "~0.7.71"
 """
 
@@ -1551,7 +1588,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "c947aabb6928be80180605b5e10a85311fca99e2"
+project_hash = "776c27e370438d644d3dea52f4dd939f79914278"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "60665b326b75db6517939d0e1875850bc4a54368"
@@ -2694,6 +2731,18 @@ deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "31e996f0a15c7b280ba9f76636b3ff9e2ae58c9a"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.4"
+
+[[deps.JSON3]]
+deps = ["Dates", "Mmap", "Parsers", "PrecompileTools", "StructTypes", "UUIDs"]
+git-tree-sha1 = "411eccfe8aba0814ffa0fdf4860913ed09c34975"
+uuid = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+version = "1.14.3"
+
+    [deps.JSON3.extensions]
+    JSON3ArrowExt = ["ArrowTypes"]
+
+    [deps.JSON3.weakdeps]
+    ArrowTypes = "31f734f8-188a-4ce0-8406-c8a06bd891cd"
 
 [[deps.Jieko]]
 deps = ["ExproniconLite"]
@@ -4088,6 +4137,12 @@ version = "0.7.1"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
     StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
+[[deps.StructTypes]]
+deps = ["Dates", "UUIDs"]
+git-tree-sha1 = "159331b30e94d7b11379037feeb9b690950cace8"
+uuid = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
+version = "1.11.0"
+
 [[deps.StyledStrings]]
 uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
 version = "1.11.0"
@@ -4566,12 +4621,10 @@ version = "4.1.0+0"
 # ╟─cb0ffc15-5abd-4bfa-ae0f-c05769f2f386
 # ╟─2a42e1e2-5123-4888-8281-164d44229425
 # ╠═44d5951c-9562-4567-9dea-bd6425ba4676
-# ╟─7d58b57a-2f01-4fc3-986b-709cc9586def
-# ╠═3c3d8e10-d902-481c-8b8c-e3a0e13f1368
-# ╠═f7196411-e949-4426-9000-56cf0e72fd3e
-# ╠═8a99e4c6-a767-4c47-ad0f-37b917105edd
 # ╠═dafdf13c-686c-468e-b584-2d93995804bb
 # ╠═73237c45-9a27-4287-99ae-0da0631ae1d8
+# ╟─7d58b57a-2f01-4fc3-986b-709cc9586def
+# ╠═3c3d8e10-d902-481c-8b8c-e3a0e13f1368
 # ╟─f43f4f52-d53e-4b46-98a1-fb80cc4caa83
 # ╟─2ffbe9cc-90fe-4c80-a1ca-94accea6f63a
 # ╟─b622ca7d-2121-4617-bc2c-05c51b465a65
@@ -4625,11 +4678,15 @@ version = "4.1.0+0"
 # ╠═4eb50bb1-28b7-4fbf-81af-1f4fa3a89429
 # ╠═72408a14-578f-4f0c-be4e-9961b8f49975
 # ╠═874732b1-c445-448b-9f55-180bc54fbff4
+# ╟─aa7a2209-c7dd-4cbf-99c2-b39035913324
+# ╠═19b064f3-3d4b-42b8-91c2-6a8992d15d02
 # ╟─6cdac429-dc25-4536-8508-391c0e9b6668
 # ╠═67bfaee1-2f1f-4f6c-ac0e-2349ee6c027d
 # ╠═48f675ca-53f6-4e9a-b8b8-9a64601c5de0
 # ╠═cc75c9b9-31eb-49f0-b423-22d142cb070e
 # ╠═0ad597cf-cefc-4009-9133-46780a7258f0
+# ╟─3a770943-a67d-4122-916a-4d6f5af6f405
+# ╠═ebce3cd0-e50d-47e7-b8a6-46ee728b4683
 # ╟─7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
 # ╠═9f7bdcef-6373-4338-912a-04585df5fcfd
 # ╠═4ffa4437-0a12-4b8e-a970-3cb6ef136d75
@@ -4639,6 +4696,8 @@ version = "4.1.0+0"
 # ╠═5c5806a0-338b-4370-a0e0-e8e60fb600a0
 # ╠═5428d08b-4550-41df-92c1-0f1580285a76
 # ╠═dd68bd9c-579d-4ea6-97b2-660859fd63df
+# ╠═759c9ca5-e6a8-4143-88ec-8b2bc5f9a9fb
+# ╠═e8f6a903-06b1-4937-9e92-084b8996ceec
 # ╠═87bd5b0f-ba77-4364-af2a-26476df836bb
 # ╠═18ca6a2c-eea2-422b-963a-760ae0780c3a
 # ╠═55baab75-4c3c-45e1-a7ee-0d7d56cd4052
