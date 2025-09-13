@@ -1509,6 +1509,17 @@ begin
 end
   ╠═╡ =#
 
+# ╔═╡ 1858167c-c799-4c02-ae80-b17af06f0fda
+# ╠═╡ disabled = true
+#=╠═╡
+#	for i in 2:len
+#		scatter!(plot_name, [(x₁[i], 20.0), (x₂[i], 20.0)]
+#		)
+
+#		#scatter!(plot_name, [(x₁[i-1], 20.0), (x₂[i-1], 20.0)], alpha = 0.0)
+#	end
+  ╠═╡ =#
+
 # ╔═╡ 55baab75-4c3c-45e1-a7ee-0d7d56cd4052
 # ╠═╡ disabled = true
 #=╠═╡
@@ -1554,17 +1565,6 @@ function simula_muelle(plot_name, x₁, x₂)
 			 markercolor = :blue
 	)
 end
-  ╠═╡ =#
-
-# ╔═╡ 1858167c-c799-4c02-ae80-b17af06f0fda
-# ╠═╡ disabled = true
-#=╠═╡
-#	for i in 2:len
-#		scatter!(plot_name, [(x₁[i], 20.0), (x₂[i], 20.0)]
-#		)
-
-#		#scatter!(plot_name, [(x₁[i-1], 20.0), (x₂[i-1], 20.0)], alpha = 0.0)
-#	end
   ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
