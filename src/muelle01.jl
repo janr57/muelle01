@@ -641,8 +641,9 @@ begin
 	# ****** Parámetros asociados al muelle ******
 	# Longitud natural del muelle
 	L₀ = 0.1
-	# Elongación del muelle
-	x₀ = L₀ - 0.5L₀
+	# Elongación inicial del muelle en valor absoluto
+	# Esta elongación inicial es negativo (muelle comprimido)
+	x₀ = abs(0.5L₀ - L₀)
 	# Constante elástica del muelle
 	k = 10.0
 	# Masa pegada a la pared (izquierda del muelle)
@@ -835,7 +836,7 @@ ODE_fase1_Acm = (m₂/(m₁ + m₂)) .* ODE_fase1_a₂
 md"###### Elongación del muelle ``x(t)``"
 
 # ╔═╡ 89cf5e1f-d657-45ac-82ac-edb72c1aeb3b
-ODE_fase1_elong = L₀ .- ODE_fase1_x₂
+ODE_fase1_elong = ODE_fase1_x₂ .- L₀
 
 # ╔═╡ b35f2726-e632-466a-8f5e-e514c4c53697
 md"###### Energía cinética del sistema ``Ec(t)``"
@@ -865,31 +866,39 @@ md"#### Gráficas (fase 1)"
 begin
 	f1x = Figure()
 	axf1x = Axis(f1x[1, 1],
-				  title = "POSICIÓN DE m₁, m₂, CM y ELONGACIÓN (FASE 1)",
+				  title = "POSICIÓN DE m₁, m₂, CM  y ELONGACIÓN (FASE 1)",
 				  xlabel = "Tiempo (s)", ylabel = "Posición (m)"
-				 )
+	)
 	
 	lines!(axf1x, ODE_fase1_t, ODE_fase1_x₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "x₁(t) ODE"
-		  )
+		   label = "x₁(t)"
+	)
 	lines!(axf1x, ODE_fase1_t, ODE_fase1_x₂,
 		   linewidth = 6.0,
 		   color = :tomato,
-		   label = "x₂(t) ODE"
-		  )
+		   label = "x₂(t)"
+	)
 	lines!(axf1x, ODE_fase1_t, fase1_analitica_x₂,
 		   linewidth = 2.0,
 		   color = :black,
 		   linestyle = :dash,
 		   label = "x₂(t) = L₀ - x₀ cos(ω₁t)"
-		  )
+	)
 	lines!(axf1x, ODE_fase1_t, ODE_fase1_Xcm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Xcm(t)"
-		  )
+	)
+	lines!(axf1x, ODE_fase1_t, ODE_fase1_elong,
+		   linewidth = 2.0,
+		   color = :black,
+		   linestyle = :dot,
+		   label = "x(t)"
+	)
+
 
 	axislegend(position = :lt)
 	
@@ -902,29 +911,30 @@ begin
 	axf1v = Axis(f1v[1, 1],
 				  title = "VELOCIDAD DE m₁, m₂ y CM (FASE 1)",
 				  xlabel = "Tiempo (s)", ylabel = "Velocidad (m/s)"
-				 )
+	)
 	
 	lines!(axf1v, ODE_fase1_t, ODE_fase1_v₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "v₁(t) ODE"
-		  )
+		   label = "v₁(t)"
+	)
 	lines!(axf1v, ODE_fase1_t, ODE_fase1_v₂,
 		   linewidth = 6.0,
 		   color = :tomato,
-		   label = "v₂(t) ODE"
-		  )
+		   label = "v₂(t)"
+	)
 	lines!(axf1v, ODE_fase1_t, fase1_analitica_v₂,
 		   linewidth = 2.0,
 		   color = :black,
 		   linestyle = :dash,
 		   label = "v₂(t) = x₀ ω₁ sin(ω₁t)"
-		  )
+	)
 	lines!(axf1v, ODE_fase1_t, ODE_fase1_Vcm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Vcm(t)"
-		  )
+	)
 
 	axislegend(position = :lt)
 	
@@ -937,29 +947,30 @@ begin
 	axf1a = Axis(f1a[1, 1],
 				  title = "ACELERACIÓN DE m₁, m₂ y CM (FASE 1)",
 				  xlabel = "Tiempo (s)", ylabel = "Aceleración (m/s²)"
-				 )
+	)
 	
 	lines!(axf1a, ODE_fase1_t, ODE_fase1_a₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "a₁(t) ODE"
-		  )
+		   label = "a₁(t)"
+	)
 	lines!(axf1a, ODE_fase1_t, ODE_fase1_a₂,
 		   linewidth = 6.0,
 		   color = :tomato,
-		   label = "a₂(t) ODE"
-		  )
+		   label = "a₂(t)"
+	)
 	lines!(axf1a, ODE_fase1_t, fase1_analitica_a₂,
 		   linewidth = 2.0,
 		   color = :black,
 		   linestyle = :dash,
 		   label = "a₂(t) = x₀ ω₁ sin(ω₁t)"
-		  )
+	)
 	lines!(axf1a, ODE_fase1_t, ODE_fase1_Acm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Acm(t)"
-		  )
+	)
 
 	axislegend(position = :rt)
 	
@@ -1121,7 +1132,7 @@ ODE_fase2_Acm = (m₁.*ODE_fase2_a₁ .+ m₂.*ODE_fase2_a₂)/(m₁+m₂)
 md"###### Elongación del muelle ``x(t)``"
 
 # ╔═╡ 486191ba-2176-4711-a2ac-b93203be369d
-ODE_fase2_elong = L₀ .- (ODE_fase2_x₂ .- ODE_fase2_x₁)
+ODE_fase2_elong = (ODE_fase2_x₂ .- ODE_fase2_x₁) .- L₀
 
 # ╔═╡ 1ca0c73a-e697-487e-961d-f1dc5b61527e
 md"###### Energía cinética de las masas ``Ec(t)``"
@@ -1148,30 +1159,38 @@ md"#### Gráficas (fase 2)"
 begin
 	f2x = Figure()
 	axf2x = Axis(f2x[1, 1],
-				  title = "POSICIÓN DE m₁, m₂ y CM (FASE 2)",
+				  title = "POSICIÓN DE m₁, m₂, RELATIVA, CM y ELONGACIÓN (FASE 2)",
 				  xlabel = "Tiempo (s)", ylabel = "Posición (m)"
-				 )
+	)
 	
 	lines!(axf2x, ODE_fase2_t, ODE_fase2_x₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "x₁(t) ODE"
-		  )
+		   label = "x₁(t)"
+	)
 	lines!(axf2x, ODE_fase2_t, ODE_fase2_x₂,
 		   linewidth = 4.0,
 		   color = :red,
-		   label = "x₂(t) ODE"
-		  )
+		   label = "x₂(t)"
+	)
 	lines!(axf2x, ODE_fase2_t, ODE_fase2_x₂₁,
 		   linewidth = 4.0,
 		   color = :orange, alpha = 0.5,
-		   label = "x₂(t) - x₁(t) ODE"
-		  )
+		   linestyle = :dot,
+		   label = "x₂₁(t)"
+	)
 	lines!(axf2x, ODE_fase2_t, ODE_fase2_Xcm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Xcm(t)"
-		  )
+	)
+	lines!(axf2x, ODE_fase2_t, ODE_fase2_elong,
+		   linewidth = 2.0,
+		   color = :black,
+		   linestyle = :dot,
+		   label = "x(t)"
+	)
 
 	axislegend(position = :lt)
 	
@@ -1182,30 +1201,32 @@ end
 begin
 	f2v = Figure()
 	axf2v = Axis(f2v[1, 1],
-				  title = "VELOCIDAD DE m₁, m₂ y CM (FASE 2)",
+				  title = "VELOCIDAD DE m₁, m₂, RELATIVA y CM (FASE 2)",
 				  xlabel = "Tiempo (s)", ylabel = "Velocidad (m/s)"
-				 )
+	)
 	
 	lines!(axf2v, ODE_fase2_t, ODE_fase2_v₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "v₁(t) ODE"
-		  )
+		   label = "v₁(t)"
+	)
 	lines!(axf2v, ODE_fase2_t, ODE_fase2_v₂,
 		   linewidth = 4.0,
 		   color = :red,
-		   label = "v₂(t) ODE"
-		  )
+		   label = "v₂(t)"
+	)
 	lines!(axf2v, ODE_fase2_t, ODE_fase2_v₂₁,
 		   linewidth = 4.0,
 		   color = :orange, alpha = 0.5,
-		   label = "v₂(t) - v₁(t) ODE"
-		  )
+		   linestyle = :dot,
+		   label = "v₂₁(t)"
+	)
 	lines!(axf2v, ODE_fase2_t, ODE_fase2_Vcm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Vcm(t)"
-		  )
+	)
 
 	axislegend(position = :rb)
 	
@@ -1216,30 +1237,32 @@ end
 begin
 	f2a = Figure()
 	axf2a = Axis(f2a[1, 1],
-				  title = "ACELERACIÓN DE m₁, m₂ y CM (FASE 2)",
+				  title = "ACELERACIÓN DE m₁, m₂, RELATIVA y CM (FASE 2)",
 				  xlabel = "Tiempo (s)", ylabel = "Aceleración (m/s²)"
-				 )
+	)
 	
 	lines!(axf2a, ODE_fase2_t, ODE_fase2_a₁,
 		   linewidth = 4.0,
 		   color = :blue,
-		   label = "a₁(t) ODE"
-		  )
+		   label = "a₁(t)"
+	)
 	lines!(axf2a, ODE_fase2_t, ODE_fase2_a₂,
 		   linewidth = 4.0,
 		   color = :red,
-		   label = "a₂(t) ODE"
-		  )
+		   label = "a₂(t)"
+	)
 	lines!(axf2a, ODE_fase2_t, ODE_fase2_a₂₁,
 		   linewidth = 4.0,
 		   color = :orange, alpha = 0.5,
-		   label = "a₂(t) - a₁(t) ODE"
-		  )
+		   linestyle = :dot,
+		   label = "a₂₁(t)"
+	)
 	lines!(axf2a, ODE_fase2_t, ODE_fase2_Acm,
 		   linewidth = 2.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Acm(t)"
-		  )
+	)
 
 	axislegend(position = :rb, labelsize= 12)
 	
@@ -1259,6 +1282,42 @@ begin
 	save("../img/plot_muelle01_fase2_a.svg", f2a)
 end
 
+# ╔═╡ 7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
+md"### Vectores totales"
+
+# ╔═╡ 9f7bdcef-6373-4338-912a-04585df5fcfd
+# Vector tiempo
+ODE_t = vcat(ODE_fase1_t, ODE_fase2_t);
+
+# ╔═╡ 4ffa4437-0a12-4b8e-a970-3cb6ef136d75
+begin
+	# Vectores posición
+	ODE_x₁ = vcat(ODE_fase1_x₁, ODE_fase2_x₁);
+	ODE_x₂ = vcat(ODE_fase1_x₂, ODE_fase2_x₂);
+end
+
+# ╔═╡ 357df361-3f01-4fbe-bfab-897a5b8ee563
+begin
+	# Vectores velocidad
+	ODE_v₁ = vcat(ODE_fase1_v₁, ODE_fase2_v₁);
+	ODE_v₂ = vcat(ODE_fase1_v₂, ODE_fase2_v₂);
+end
+
+# ╔═╡ bdb70ea9-9824-4d32-b37e-84ad0a0a73b3
+begin
+	# Vectores aceleración
+	ODE_a₁ = vcat(ODE_fase1_a₁, ODE_fase2_a₁);
+	ODE_a₂ = vcat(ODE_fase1_a₂, ODE_fase2_a₂);
+end
+
+# ╔═╡ e2a0d1dc-63ba-4a01-a13a-bbaeafdabd19
+# Vector Xcm
+ODE_Xcm = vcat(ODE_fase1_Xcm, ODE_fase2_Xcm)
+
+# ╔═╡ 46657766-18c0-4d3b-a7db-a0b9189788b3
+# Vector elongación
+ODE_elong = vcat(ODE_fase1_elong, ODE_fase2_elong)
+
 # ╔═╡ 6cdac429-dc25-4536-8508-391c0e9b6668
 md"#### Gráficas (Total)"
 
@@ -1266,40 +1325,56 @@ md"#### Gráficas (Total)"
 begin
 	fx = Figure()
 	axfx = Axis(fx[1, 1],
-				title = "POSICIÓN DE m₁, m₂ y CM (TOTAL)",
+				title = "POSICIÓN DE m₁, m₂, CM y ELONGACIÓN (TOTAL)",
 				xlabel = "Tiempo (s)", ylabel = "Posición (m)"
 	)
 	
 	lines!(axfx, ODE_fase1_t, ODE_fase1_x₁,
 		   linewidth = 4,
 		   color = :blue, alpha = 0.35,
-		   label = "x₁(t) ODE fase 1"
+		   label = "x₁(t) fase 1"
 	)
 	lines!(axfx, ODE_fase2_t, ODE_fase2_x₁,
 		   linewidth = 5.0,
 		   color = :blue, alpha = 1.0,
-		   label = "x₁(t) ODE fase 2"
+		   label = "x₁(t) fase 2"
 	)
 	lines!(axfx, ODE_fase1_t, ODE_fase1_x₂,
 		   linewidth = 4,
 		   color = :red, alpha = 0.35,
-		   label = "x₂(t) ODE fase 1"
-		  )
+		   label = "x₂(t) fase 1"
+	)
 	lines!(axfx, ODE_fase2_t, ODE_fase2_x₂,
 		   linewidth = 5.0,
 		   color = :red,
-		   label = "x₂(t) ODE fase 2"
-		  )
+		   label = "x₂(t) fase 2"
+	)
 	lines!(axfx, ODE_fase1_t, ODE_fase1_Xcm,
 		   linewidth = 3.0,
-		   color = :gray, alpha = 0.35,
-		   label = "Xcm(t) ODE fase 1"
-		  )
+		   color = :green, alpha = 0.35,
+		   linestyle = :dashdot,
+		   label = "Xcm(t) fase 1"
+	)
 	lines!(axfx, ODE_fase2_t, ODE_fase2_Xcm,
 		   linewidth = 3.0,
-		   color = :gray,
-		   label = "Xcm(t) ODE fase 2"
-		  )
+		   color = :green,
+		   linestyle = :dashdot,
+		   label = "Xcm(t) fase 2"
+	)
+	lines!(axfx, ODE_fase1_t, ODE_fase1_elong,
+		   linewidth = 3.0,
+		   #color = :green, alpha = 0.35,
+		   color = :black, alpha = 0.35,
+		   linestyle = :dot,
+		   label = "x(t) fase 1"
+	)
+	lines!(axfx, ODE_fase2_t, ODE_fase2_elong,
+		   linewidth = 3.0,
+		   #color = :green, alpha = 1,
+		   color = :black, alpha = 1.0,
+		   linestyle = :dot,
+		   label = "x(t) fase 2"
+	)
 
 	axislegend(position = :lt)
 	
@@ -1328,25 +1403,26 @@ begin
 		   linewidth = 4,
 		   color = :red, alpha = 0.35,
 		   label = "v₂(t) ODE fase 1"
-		  )
+	)
 	lines!(axfv, ODE_fase2_t, ODE_fase2_v₂,
 		   linewidth = 5.0,
 		   color = :red,
 		   label = "v₂(t) ODE fase 2"
-		  )
+	)
 	lines!(axfv, ODE_fase1_t, ODE_fase1_Vcm,
 		   linewidth = 2.5,
-		   color = :gray, alpha = 0.35,
+		   color = :green, alpha = 0.35,
+		   linestyle = :dashdot,
 		   label = "Vcm(t) ODE fase 1"
-		  )
+	)
 	lines!(axfv, ODE_fase2_t, ODE_fase2_Vcm,
 		   linewidth = 3.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Vcm(t) ODE fase 2"
-		  )
+	)
 
-	Legend(fv[1, 2], axfv, labelsize = 12)
-	#axislegend(position = :rb)
+	Legend(fv[1, 2], axfv, labelsize = 11)
 	
 	fv
 end	
@@ -1373,25 +1449,26 @@ begin
 		   linewidth = 4,
 		   color = :red, alpha = 0.35,
 		   label = "a₂(t) ODE fase 1"
-		  )
+	)
 	lines!(axfa, ODE_fase2_t, ODE_fase2_a₂,
 		   linewidth = 5.0,
 		   color = :red,
 		   label = "a₂(t) ODE fase 2"
-		  )
+	)
 	lines!(axfa, ODE_fase1_t, ODE_fase1_Acm,
 		   linewidth = 3.0,
-		   color = :gray, alpha = 0.35,
+		   color = :green, alpha = 0.35,
+		   linestyle = :dashdot,
 		   label = "Acm(t) ODE fase 1"
-		  )
+	)
 	lines!(axfa, ODE_fase2_t, ODE_fase2_Acm,
 		   linewidth = 3.0,
-		   color = :gray,
+		   color = :green,
+		   linestyle = :dashdot,
 		   label = "Acm(t) ODE fase 2"
-		  )
+	)
 
-	Legend(fa[1, 2], axfa, labelsize = 12)
-	#axislegend(position = :ct, labelsize=10)
+	Legend(fa[1, 2], axfa, labelsize = 11)
 	
 	fa
 end	
@@ -1418,28 +1495,71 @@ begin
 		   linewidth = 4,
 		   color = :red, alpha = 0.35,
 		   label = "Ep(t) ODE fase 1"
-		  )
+	)
 	lines!(axfE, ODE_fase2_t, ODE_fase2_Ep,
 		   linewidth = 5.0,
 		   color = :red,
 		   label = "Ep(t) ODE fase 2"
-		  )
+	)
 	lines!(axfE, ODE_fase1_t, ODE_fase1_E,
 		   linewidth = 3.0,
 		   color = :gray, alpha = 0.35,
+		   linestyle = :dash,
 		   label = "E(t) ODE fase 1"
-		  )
+	)
 	lines!(axfE, ODE_fase2_t, ODE_fase2_E,
 		   linewidth = 3.0,
 		   color = :gray,
+		   linestyle = :dash,
 		   label = "E(t) ODE fase 2"
-		  )
+	)
 
-	Legend(fE[1, 2], axfE, labelsize = 12)
-	#axislegend(position = :ct, labelsize=10)
+	Legend(fE[1, 2], axfE, labelsize = 11)
 	
 	fE
 end	
+
+# ╔═╡ 307dd1e7-dead-45d0-b9c1-221bf4e3fa81
+begin
+	felong = Figure()
+	axfelong = Axis(felong[1, 1],
+				title = "ELONGACIÓN DE m₁, m₂ y CM (TOTAL)",
+				xlabel = "Tiempo (s)", ylabel = "Posición (m)"
+	)
+	
+	lines!(axfelong, ODE_t, ODE_x₁,
+		   linewidth = 4,
+		   color = :blue, alpha = 1.0,
+		   label = "x₁(t) ODE"
+	)
+	lines!(axfelong, ODE_t, ODE_x₂,
+		   linewidth = 4,
+		   color = :red, alpha = 1.0,
+		   label = "x₂(t) ODE"
+		  )
+	lines!(axfelong, ODE_t, ODE_Xcm,
+		   linewidth = 3.0,
+		   color = :green, alpha = 1.0,
+		   linestyle = :dashdot,
+		   label = "Xcm(t) ODE"
+		  )
+	lines!(axfelong, ODE_fase1_t, ODE_fase1_elong,
+		   linewidth = 3.0,
+		   color = :black, alpha = 0.35,
+		   linestyle = :dot,
+		   label = "x(t) ODE fase 1"
+		  )
+	lines!(axfelong, ODE_fase2_t, ODE_fase2_elong,
+		   linewidth = 3.0,
+		   color = :black, alpha = 1,
+		   linestyle = :dot,
+		   label = "x(t) ODE fase 2"
+		  )
+
+	axislegend(position = :lt)
+	
+	felong
+end
 
 # ╔═╡ 3a770943-a67d-4122-916a-4d6f5af6f405
 md"##### Guarda figuras (total)"
@@ -1454,33 +1574,51 @@ begin
 	save("../img/plot_muelle01_a.svg", fa)
 end
 
-# ╔═╡ 7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
-md"#### Vectores totales"
+# ╔═╡ 2918e441-e8ec-4ae9-ae8e-c2f2cab1fe42
+md"### Ver/Grabar el movimiento del muelle"
 
-# ╔═╡ 9f7bdcef-6373-4338-912a-04585df5fcfd
-# Vector tiempo
-ODE_t = vcat(ODE_fase1_t, ODE_fase2_t);
+# ╔═╡ 2290c220-da23-4115-a397-74f74611e12b
+md"#### Instrucciones para ver/grabar el movimiento del muelle"
 
-# ╔═╡ 4ffa4437-0a12-4b8e-a970-3cb6ef136d75
-begin
-	# Vectores posiciones
-	ODE_x₁ = vcat(ODE_fase1_x₁, ODE_fase2_x₁);
-	ODE_x₂ = vcat(ODE_fase1_x₂, ODE_fase2_x₂);
-end
+# ╔═╡ a932fbf8-e3d6-4d8b-9d35-969e7ca9bc61
+md"""Para observar el movimiento del muelle:
+1. Entre en el directorio del proyecto:
+```bash
+	$ cd ~/path_to_muelle01
+	$ julia --project = .
+```
+```julia
+	julia> include("src/movimiento_muelle.jl")
+```
+2. Para grabar el movimiento en un fichero .mp4:
+```julia
+	julia> include("src/graba_movimiento_muelle.jl")
+```
+"""
 
-# ╔═╡ 357df361-3f01-4fbe-bfab-897a5b8ee563
-begin
-	# Vectores velocidades
-	ODE_v₁ = vcat(ODE_fase1_v₁, ODE_fase2_v₁);
-	ODE_v₂ = vcat(ODE_fase1_v₂, ODE_fase2_v₂);
-end
+# ╔═╡ 8ab3fb0b-6697-4f3b-b9dc-66114e81f85c
+md"#### Cálculos previos para ver/grabar el movimiento del muelle"
 
-# ╔═╡ bdb70ea9-9824-4d32-b37e-84ad0a0a73b3
-begin
-	# Vectores aceleraciones
-	ODE_a₁ = vcat(ODE_fase1_a₁, ODE_fase2_a₁);
-	ODE_a₂ = vcat(ODE_fase1_a₂, ODE_fase2_a₂);
-end
+# ╔═╡ 4dd2ee21-31fa-406e-8ee1-c678e7171de3
+ODE_elong
+
+# ╔═╡ 382f83b2-ab12-459f-b4f4-96aa7a4a7f1e
+
+
+# ╔═╡ 04b3af55-86eb-4667-b2e0-c5ccd782b5a9
+negabsmax = maximum([abs.(x) for x in ODE_elong if x < 0])
+
+# ╔═╡ 61bbd405-f792-4885-9149-d45f194c28fa
+posmax = maximum([x for x in ODE_elong if x >= 0])
+
+# ╔═╡ 02550994-691d-4411-9b16-7e60425368a6
+absmax = max(negabsmax, posmax)
+
+# ╔═╡ 9c70764a-429d-4cb0-9471-981e14c47584
+elong_norm = ODE_elong./absmax
+
+# ╔═╡ 4cc49a5e-7aaa-4282-a58f-e51b05cf7d03
+maximum(elong_norm)
 
 # ╔═╡ 4c5c02d3-d9fd-4f12-b1dc-2f013fe6db4e
 xmin = min(minimum(ODE_x₁), minimum(ODE_x₂))
@@ -1495,7 +1633,7 @@ xp₁ = 100 .* (ODE_x₁ .- xmin)./(xmax - xmin)
 xp₂ = 100 .* (ODE_x₂ .- xmin)./(xmax - xmin)
 
 # ╔═╡ 759c9ca5-e6a8-4143-88ec-8b2bc5f9a9fb
-posiciones = Dict("xp1" => xp₁, "xp2" => xp₂)
+posiciones = Dict("xp1" => xp₁, "xp2" => xp₂, "elongnorm" => elong_norm)
 
 # ╔═╡ e8f6a903-06b1-4937-9e92-084b8996ceec
 open("posiciones.json", "w") do pos
@@ -4625,18 +4763,32 @@ version = "4.1.0+0"
 # ╠═874732b1-c445-448b-9f55-180bc54fbff4
 # ╟─aa7a2209-c7dd-4cbf-99c2-b39035913324
 # ╠═19b064f3-3d4b-42b8-91c2-6a8992d15d02
-# ╟─6cdac429-dc25-4536-8508-391c0e9b6668
-# ╠═67bfaee1-2f1f-4f6c-ac0e-2349ee6c027d
-# ╠═48f675ca-53f6-4e9a-b8b8-9a64601c5de0
-# ╠═cc75c9b9-31eb-49f0-b423-22d142cb070e
-# ╠═0ad597cf-cefc-4009-9133-46780a7258f0
-# ╟─3a770943-a67d-4122-916a-4d6f5af6f405
-# ╠═ebce3cd0-e50d-47e7-b8a6-46ee728b4683
 # ╟─7cd9047e-2b93-4ef3-9d7e-e11ef4b2196f
 # ╠═9f7bdcef-6373-4338-912a-04585df5fcfd
 # ╠═4ffa4437-0a12-4b8e-a970-3cb6ef136d75
 # ╠═357df361-3f01-4fbe-bfab-897a5b8ee563
 # ╠═bdb70ea9-9824-4d32-b37e-84ad0a0a73b3
+# ╠═e2a0d1dc-63ba-4a01-a13a-bbaeafdabd19
+# ╠═46657766-18c0-4d3b-a7db-a0b9189788b3
+# ╟─6cdac429-dc25-4536-8508-391c0e9b6668
+# ╠═67bfaee1-2f1f-4f6c-ac0e-2349ee6c027d
+# ╠═48f675ca-53f6-4e9a-b8b8-9a64601c5de0
+# ╠═cc75c9b9-31eb-49f0-b423-22d142cb070e
+# ╠═0ad597cf-cefc-4009-9133-46780a7258f0
+# ╠═307dd1e7-dead-45d0-b9c1-221bf4e3fa81
+# ╟─3a770943-a67d-4122-916a-4d6f5af6f405
+# ╠═ebce3cd0-e50d-47e7-b8a6-46ee728b4683
+# ╟─2918e441-e8ec-4ae9-ae8e-c2f2cab1fe42
+# ╟─2290c220-da23-4115-a397-74f74611e12b
+# ╟─a932fbf8-e3d6-4d8b-9d35-969e7ca9bc61
+# ╟─8ab3fb0b-6697-4f3b-b9dc-66114e81f85c
+# ╠═4dd2ee21-31fa-406e-8ee1-c678e7171de3
+# ╠═382f83b2-ab12-459f-b4f4-96aa7a4a7f1e
+# ╠═04b3af55-86eb-4667-b2e0-c5ccd782b5a9
+# ╠═61bbd405-f792-4885-9149-d45f194c28fa
+# ╠═02550994-691d-4411-9b16-7e60425368a6
+# ╠═9c70764a-429d-4cb0-9471-981e14c47584
+# ╠═4cc49a5e-7aaa-4282-a58f-e51b05cf7d03
 # ╠═4c5c02d3-d9fd-4f12-b1dc-2f013fe6db4e
 # ╠═5c5806a0-338b-4370-a0e0-e8e60fb600a0
 # ╠═5428d08b-4550-41df-92c1-0f1580285a76
