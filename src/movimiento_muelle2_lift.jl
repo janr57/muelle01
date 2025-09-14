@@ -35,8 +35,13 @@ limits!(ax, xpmin, xpmax, ypmin, ypmax)
 index = Observable(1)
 pos1 = @lift(Point2f(xp1_tuple[$index], yp))
 pos2 = @lift(Point2f(xp2_tuple[$index], yp))
+#muelle = @lift((Point2f(xp1_tuple[$index], yp), Point2f(xp2_tuple[$index], yp)))
+muelle = @lift([xp1_tuple[$index], xp2_tuple[$index]])
 
-# Representa la masa 1
+# Representa el muelle mediante una línea negra
+#lines!(ax, [pos1[][1], pos2[][1]], [yp, yp], linewidth = 1, color = :black)
+# Representa las masas 1 y 2
+lines!(ax, muelle, [yp, yp], linewidth = 1, color = :red)
 scatter!(ax, pos1, markersize = 20, color = :black)
 scatter!(ax, pos2, markersize = 20, color = :black)
 
@@ -49,6 +54,8 @@ for i in 2:len
     # Actualiza la posición de la masa 1 con las nuevas coordenadas
     pos1[] = Point2f(xp1_tuple[i], yp)
     pos2[] = Point2f(xp2_tuple[i], yp)
+    #muelle[] = (Point2f(xp1_tuple[i], yp), Point2f(xp2_tuple[i], yp))
+    muelle[] = [xp1_tuple[i], xp2_tuple[i]]
 
     sleep(0.001)
 end
