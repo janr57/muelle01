@@ -637,30 +637,59 @@ md"###### t₂ₚ: Tiempo final de la segunda fase"
 
 # ╔═╡ c3ab23be-07f4-4429-834a-a612ae221a4a
 begin
-	L₀ = 0.25
-	x₀ = 0.10
-	k = 1.0
+	# ---------------------------------------------------------------------------
+	# ****** Parámetros asociados al muelle ******
+	# Longitud natural del muelle
+	L₀ = 0.1
+	# Elongación del muelle
+	x₀ = L₀ - 0.5L₀
+	# Constante elástica del muelle
+	k = 10.0
+	# Masa pegada a la pared (izquierda del muelle)
 	m₁ = 1.0
+	# Masa al otro extremo (derecha del muelle)
 	m₂ = 1.0
+	# Masa reducida del sistema
 	μ = 1/m₁ + 1/m₂
+	# Frecuencia angular del muelle (fase 1)
 	ω₁ = sqrt(k/m₁)
+	# Frecuencia angular del muelle (fase 2)
 	ω₂ = sqrt(k/μ)
+	# ---------------------------------------------------------------------------
+	# ****** Tiempos ******
+	# Tiempo inicial (fase 1)
 	t₀₁ = 0.0
-	tₚ₁ = π/(2*ω₁)
+	# Tiempo final (fase1)
+	tₚ₁ = π/(2ω₁)
+	# Tiempo inicial (fase 2)
 	t₀₂ = tₚ₁
-	tₚ₂ = tₚ₁ + 1 * 2*π/ω₂
+	# Tiempo final (fase 2)
+	tₚ₂ = tₚ₁ + 1 * 2π/ω₂
+	# Incremento de tiempo para la soluciones de las ecuaciones diferenciales
+	inc_t = 0.001
+	# ---------------------------------------------------------------------------	
+	# ****** Posiciones ******
+	# Posición inicial de la partícula 1 (fase 1)
 	x₁₀₁ = 0.0
+	# Posición inicial de la partícula 2 (fase 1)
 	x₂₀₁ = L₀ - x₀
+	# Posición final de la partícula 1 (fase 1)
+	x₁ₚ₁ = x₁₀₁
+	# Posición final de la partícula 2 (fase 1)
+	x₂ₚ₁ = L₀
+	# Posición inicial de la partícula 1 (fase 2)
+	x₁₀₂ = x₁ₚ₁
+	# Posición incial de la partícula 2 (fase 2)
+	x₂₀₂ = x₂ₚ₁
+	# ---------------------------------------------------------------------------
+	# ****** Velocidades ******
 	v₁₀₁ = 0.0
 	v₂₀₁ = 0.0
-	x₁ₚ₁ = x₁₀₁
-	x₂ₚ₁ = L₀
 	v₁ₚ₁ = v₁₀₁
 	v₂ₚ₁ = x₀ * ω₁
-	x₁₀₂ = x₁ₚ₁
-	x₂₀₂ = x₂ₚ₁
 	v₁₀₂ = v₁ₚ₁
 	v₂₀₂ = v₂ₚ₁
+	# ---------------------------------------------------------------------------
 end
 
 # ╔═╡ c677f634-3133-44ce-bc5e-04c2d516f742
@@ -731,7 +760,7 @@ fase1_sol = solve(fase1_prob, abstol=1e-12, reltol=1e-12)
 md"###### Extracción de valores del resultado en forma de arrays"
 
 # ╔═╡ 6a887098-abd4-41ba-9e50-de4b7eae2fc9
-ODE_fase1_t, ODE_fase1_v₂, ODE_fase1_x₂ = valores_ODE_fase1(fase1_sol, dt=0.001)
+ODE_fase1_t, ODE_fase1_v₂, ODE_fase1_x₂ = valores_ODE_fase1(fase1_sol, dt=inc_t)
 
 # ╔═╡ 369d58f4-6c8d-48af-b172-751e89f4ceea
 md"###### Tamaño de los vectores de datos en la fase 1"
@@ -744,6 +773,9 @@ md"###### Posición ``\text{x₁}(t)``"
 
 # ╔═╡ 0b53878d-9a5d-4b96-a2eb-5a2bdc1e4027
 ODE_fase1_x₁ = zeros(fase1_length)
+
+# ╔═╡ cfc9590c-a657-404f-a191-cb1b888bea2a
+ODE_fase1_x₂
 
 # ╔═╡ 1cfc9bbd-05cd-4d31-90e9-f8ba2858fb23
 md"###### Posición ``\text{x₂}\,(t)``, calculada analíticamente"
@@ -1032,7 +1064,7 @@ fase2_sol = solve(fase2_prob, abstol=1e-12, reltol=1e-12)
 md"###### Extracción de valores del resultado en forma de arrays"
 
 # ╔═╡ 8ca72f78-588d-4c69-a8e8-4fa16fb4b93f
-ODE_fase2_t, ODE_fase2_x₁, ODE_fase2_x₂, ODE_fase2_v₁, ODE_fase2_v₂ = valores_ODE_fase2(fase2_sol, dt=0.001)
+ODE_fase2_t, ODE_fase2_x₁, ODE_fase2_x₂, ODE_fase2_v₁, ODE_fase2_v₂ = valores_ODE_fase2(fase2_sol, dt=inc_t)
 
 # ╔═╡ ab04a12a-b375-4038-ad6c-879033ffb3b6
 ODE_fase1_x₂
@@ -1457,115 +1489,27 @@ xmin = min(minimum(ODE_x₁), minimum(ODE_x₂))
 xmax = max(maximum(ODE_x₁), maximum(ODE_x₂))
 
 # ╔═╡ 5428d08b-4550-41df-92c1-0f1580285a76
-p₁ = 100 .* (ODE_x₁ .- xmin)./(xmax - xmin)
+xp₁ = 100 .* (ODE_x₁ .- xmin)./(xmax - xmin)
 
 # ╔═╡ dd68bd9c-579d-4ea6-97b2-660859fd63df
-p₂ = 100 .* (ODE_x₂ .- xmin)./(xmax - xmin)
+xp₂ = 100 .* (ODE_x₂ .- xmin)./(xmax - xmin)
 
 # ╔═╡ 759c9ca5-e6a8-4143-88ec-8b2bc5f9a9fb
-posiciones = Dict("x1" => ODE_x₁, "x2" => ODE_x₂)
+posiciones = Dict("xp1" => xp₁, "xp2" => xp₂)
 
 # ╔═╡ e8f6a903-06b1-4937-9e92-084b8996ceec
 open("posiciones.json", "w") do pos
 	JSON3.write(pos, posiciones)
 end
 
-# ╔═╡ 87bd5b0f-ba77-4364-af2a-26476df836bb
-# ╠═╡ disabled = true
-#=╠═╡
-simulacion = true
-  ╠═╡ =#
+# ╔═╡ fd9a1117-1457-45dc-a9fa-d3279425cf55
+(xp₁[1], xp₁[end])
 
-# ╔═╡ 18ca6a2c-eea2-422b-963a-760ae0780c3a
-# ╠═╡ disabled = true
-#=╠═╡
-begin
-	simulacion
-	plot_name = "simul"
-	len = length(p₁)
-	
-	plot_name = plot(legend = :none,
-					 #axis = ([], false),
-					 size = (1024, 150),
-					 xlims = (-2.0, 102.0),
-					 ylims = (0.0, 100.0)
-	);
+# ╔═╡ 40752e69-b28d-4022-8d3a-338d8e65fb3a
+(xp₂[1], xp₂[end])
 
-#	scatter!(plot_name,
-#			 [(x₁[1], 20.0), (x₂[1], 20.0)],
-#			 markersize = 5.0,
-#			 markercolor = :blue
-#	);
-
-	for i in 1:len
-		scatter!(plot_name,
-				[(p₁[i], 20.0), (p₂[i], 20.0)],
-				 markersize = 5.0,
-				 markercolor = :blue
-		)
-	end
-
-	#simula_muelle(plot_name, p₁, p₂)
-end
-  ╠═╡ =#
-
-# ╔═╡ 1858167c-c799-4c02-ae80-b17af06f0fda
-# ╠═╡ disabled = true
-#=╠═╡
-#	for i in 2:len
-#		scatter!(plot_name, [(x₁[i], 20.0), (x₂[i], 20.0)]
-#		)
-
-#		#scatter!(plot_name, [(x₁[i-1], 20.0), (x₂[i-1], 20.0)], alpha = 0.0)
-#	end
-  ╠═╡ =#
-
-# ╔═╡ 55baab75-4c3c-45e1-a7ee-0d7d56cd4052
-# ╠═╡ disabled = true
-#=╠═╡
-function simula_muelle(plot_name, x₁, x₂)
-	len = length(x₁)
-	
-	plot_name = plot(legend = :none,
-					 #axis = ([], false),
-					 size = (1024, 150),
-					 xlims = (-2.0, 102.0),
-					 ylims = (0.0, 100.0)
-	);
-
-#	scatter!(plot_name,
-#			 [(x₁[1], 20.0), (x₂[1], 20.0)],
-#			 markersize = 5.0,
-#			 markercolor = :blue
-#	);
-
-	for i in 1:len
-		scatter!(plot_name,
-				[(x₁[i], 20.0), (x₂[i], 20.0)],
-				 markersize = 5.0,
-				 markercolor = :blue
-		)
-	end
-end
-  ╠═╡ =#
-
-# ╔═╡ a80c8645-31cf-470c-9900-2a725a024cd6
-# ╠═╡ disabled = true
-#=╠═╡
-function simula_muelle(plot_name, x₁, x₂)
-	len = length(x₁)
-	plot_name = plot(legend = :none,
-					 axis = ([], false),
-					 xlims = (-2.0, 102.0),
-					 ylims = (0.0, 100.0)
-	);
-	ac
-	scatter!(plot_name, [(x₁[1], 20.0), (x₂[1], 20.0)],
-			 markersize = 5.0,
-			 markercolor = :blue
-	)
-end
-  ╠═╡ =#
+# ╔═╡ 21bbe944-e221-4385-9303-a3e9343085a4
+ODE_x₂[1]
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -4592,6 +4536,7 @@ version = "4.1.0+0"
 # ╠═d7ab580c-061f-4369-babf-1c7608d24073
 # ╟─f76e194d-65da-48bc-ac2c-c213473f79e6
 # ╠═0b53878d-9a5d-4b96-a2eb-5a2bdc1e4027
+# ╠═cfc9590c-a657-404f-a191-cb1b888bea2a
 # ╟─1cfc9bbd-05cd-4d31-90e9-f8ba2858fb23
 # ╠═073cd0dc-4932-455b-9f88-a350e2e9695a
 # ╟─8b369410-4589-4878-996d-9cf034e1281f
@@ -4698,10 +4643,8 @@ version = "4.1.0+0"
 # ╠═dd68bd9c-579d-4ea6-97b2-660859fd63df
 # ╠═759c9ca5-e6a8-4143-88ec-8b2bc5f9a9fb
 # ╠═e8f6a903-06b1-4937-9e92-084b8996ceec
-# ╠═87bd5b0f-ba77-4364-af2a-26476df836bb
-# ╠═18ca6a2c-eea2-422b-963a-760ae0780c3a
-# ╠═55baab75-4c3c-45e1-a7ee-0d7d56cd4052
-# ╠═a80c8645-31cf-470c-9900-2a725a024cd6
-# ╠═1858167c-c799-4c02-ae80-b17af06f0fda
+# ╠═fd9a1117-1457-45dc-a9fa-d3279425cf55
+# ╠═40752e69-b28d-4022-8d3a-338d8e65fb3a
+# ╠═21bbe944-e221-4385-9303-a3e9343085a4
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
