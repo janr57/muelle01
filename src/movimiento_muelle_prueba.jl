@@ -39,13 +39,13 @@ pos2 = @lift(Point2f(xp2_tuple[$index], yp))
 #muelle = @lift((Point2f(xp1_tuple[$index], yp), Point2f(xp2_tuple[$index], yp)))
 muelle = @lift([xp1_tuple[$index], xp2_tuple[$index]])
 #e = abs(elongnorm_tuple[1])
-elong = @lift(abs(elongnorm_tuple[$index]))
+elong = @lift(elongnorm_tuple[$index])
 #elong = @lift(elongnorm_tuple[$index])
 
 # Representa el muelle mediante una línea negra
 #lines!(ax, [pos1[][1], pos2[][1]], [yp, yp], linewidth = 1, color = :black)
 # Representa las masas 1 y 2
-lines!(ax, muelle, [yp, yp], linewidth = elong, color = :red)
+lines!(ax, muelle, [yp, yp], linewidth = 3, color = :black)
 scatter!(ax, pos1, markersize = 20, color = :black)
 scatter!(ax, pos2, markersize = 20, color = :black)
 
