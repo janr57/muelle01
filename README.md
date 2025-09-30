@@ -65,8 +65,10 @@ Puesta en marcha:
 		$ julia --project=.
 	2. Arrancar Pluto:
 		julia> import Pluto; Pluto.run()
-	3. Abrir el cuaderno de Pluto *src/muelle01.jl* en la sección "Open a notebook" 
-	del cuaderno y hacer click en "Open".
+	3. Abrir el cuaderno de Pluto *src/muelle01.jl* en la sección "My work" 
+	del cuaderno y hacer click en "muelle01.jl", o bien, abrir el cuaderno de Pluto
+	*src/muelle01.jl* en la sección "Open a notebook" del cuaderno y hacer click en
+	"Open".
 	4. Pulsar el botón "Run notebook code" de la parte superior del cuaderno.
 	En el cuadro "Status" de la parte inferior del cuaderno, se muestra el avance
 	de la primera precompilación (que puede tardar un poco la primera vez).
