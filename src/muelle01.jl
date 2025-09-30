@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.17
+# v0.20.19
 
 using Markdown
 using InteractiveUtils
@@ -899,11 +899,13 @@ begin
 		   label = "x(t)"
 	)
 
-
-	axislegend(position = :lt)
+	axislegend(position = :lt, labelsize = 11, backgroundcolor = (:white, 0.75))
 	
 	f1x
 end	
+
+# ╔═╡ acbf9698-fb10-4c2e-97d9-0885a67052f4
+
 
 # ╔═╡ dafdf13c-686c-468e-b584-2d93995804bb
 begin
@@ -1264,7 +1266,7 @@ begin
 		   label = "Acm(t)"
 	)
 
-	axislegend(position = :rb, labelsize= 12)
+	axislegend(position = :rb, labelsize= 11, backgroundcolor = (:white, 0.75))
 	
 	f2a
 end	
@@ -1376,7 +1378,7 @@ begin
 		   label = "x(t) fase 2"
 	)
 
-	axislegend(position = :lt)
+	axislegend(position = :lt, labelsize=11, backgroundcolor = (:white, 0.75))
 	
 	fx
 end
@@ -1668,7 +1670,7 @@ PlutoUI = "~0.7.71"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.6"
+julia_version = "1.11.7"
 manifest_format = "2.0"
 project_hash = "776c27e370438d644d3dea52f4dd939f79914278"
 
@@ -4704,6 +4706,7 @@ version = "4.1.0+0"
 # ╟─cb0ffc15-5abd-4bfa-ae0f-c05769f2f386
 # ╟─2a42e1e2-5123-4888-8281-164d44229425
 # ╠═44d5951c-9562-4567-9dea-bd6425ba4676
+# ╠═acbf9698-fb10-4c2e-97d9-0885a67052f4
 # ╠═dafdf13c-686c-468e-b584-2d93995804bb
 # ╠═73237c45-9a27-4287-99ae-0da0631ae1d8
 # ╟─7d58b57a-2f01-4fc3-986b-709cc9586def
